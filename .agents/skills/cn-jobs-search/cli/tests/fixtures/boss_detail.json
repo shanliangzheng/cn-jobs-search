@@ -1,0 +1,25 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "jobInfo": {
+      "encryptJobId": "enc-bbb",
+      "jobName": "大模型应用工程师",
+      "salaryDesc": "35-60K·16薪",
+      "cityName": "北京",
+      "areaDistrict": "海淀区",
+      "businessDistrict": "中关村",
+      "experienceName": "3-5年",
+      "degreeName": "硕士",
+      "jobLabels": ["LLM"],
+      "skills": ["RAG", "Agent"],
+      "jobDescription": "<p>负责 Agent 平台：</p><ul><li>RAG 检索链路</li><li>工具调用编排</li></ul><script>alert(1)</script>"
+    },
+    "brandInfo": {
+      "brandName": "智源未来",
+      "brandIndustry": "人工智能",
+      "brandScaleName": "50-99人"
+    },
+    "bossInfo": {"name": "王先生", "title": "技术负责人"}
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "hasMore": true,
+    "jobList": [
+      {
+        "securityId": "sec-aaa",
+        "encryptJobId": "enc-aaa",
+        "jobName": "Python 后端工程师",
+        "salaryDesc": "25-40K·14薪",
+        "brandName": "云启科技",
+        "brandIndustry": "企业服务",
+        "brandScaleName": "100-499人",
+        "cityName": "北京",
+        "areaDistrict": "朝阳区",
+        "businessDistrict": "望京",
+        "jobExperience": "3-5年",
+        "jobDegree": "本科",
+        "jobLabels": ["Python", "FastAPI"],
+        "skills": ["PostgreSQL", "Docker"],
+        "bossName": "李女士",
+        "bossTitle": "HR",
+        "lastModifyTime": 1792332837000
+      },
+      {
+        "securityId": "sec-bbb",
+        "encryptJobId": "enc-bbb",
+        "jobName": "大模型应用工程师",
+        "salaryDesc": "35-60K·16薪",
+        "brandName": "智源未来",
+        "brandIndustry": "人工智能",
+        "brandScaleName": "50-99人",
+        "cityName": "北京",
+        "areaDistrict": "海淀区",
+        "businessDistrict": "中关村",
+        "jobExperience": "3-5年",
+        "jobDegree": "硕士",
+        "jobLabels": ["LLM"],
+        "skills": ["RAG", "Agent"],
+        "bossName": "王先生",
+        "bossTitle": "技术负责人"
+      }
+    ]
+  }
+}
