@@ -58,7 +58,7 @@ def _add_common(p: argparse.ArgumentParser, detail: bool = False) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(prog="cn-jobs-search", description="国内招聘职位检索")
-    ap.add_argument("--version", action="version", version="cn-jobs-search 0.1.0")
+    ap.add_argument("--version", action="version", version="cn-jobs-search 0.2.0")
     sub = ap.add_subparsers(dest="cmd", required=True)
 
     s = sub.add_parser("search", help="搜索职位")
@@ -113,15 +113,16 @@ def main(argv: list[str] | None = None) -> int:
                 raise FetchError("MISSING_REQUIRED", "缺少 --query",
                                  hint='例如：search -q "python 后端" --city 北京')
             city_code, city_name = resolve_city(args.city)
+            domain = "liepin.com" if args.provider == "liepin" else "zhipin.com"
             cookie = cookie_mod.resolve(args.cookie, args.cookie_file, args.provider,
-                                        domain="zhipin.com")
+                                        domain=domain)
             kw = {}
-            if args.provider == "boss":
+            if args.provider in ("boss", "liepin"):
                 kw = dict(extra_params=_parse_params(args.param))
             jobs = provider.search(
-                query=query, city_code=city_code, page=args.page,
-                page_size=args.page_size, cookie=cookie, timeout=args.timeout,
-                raw_file=args.raw, debug=args.debug, **kw,
+                query=query, city_code=city_code, city_name=city_name,
+                page=args.page, page_size=args.page_size, cookie=cookie,
+                timeout=args.timeout, raw_file=args.raw, debug=args.debug, **kw,
             )
             jobs = jobs[:max(0, args.limit)]
             if fmt == "json":
@@ -136,8 +137,9 @@ def main(argv: list[str] | None = None) -> int:
             return 0
 
         if args.cmd == "detail":
+            domain = "liepin.com" if args.provider == "liepin" else "zhipin.com"
             cookie = cookie_mod.resolve(args.cookie, args.cookie_file, args.provider,
-                                        domain="zhipin.com")
+                                        domain=domain)
             job = provider.detail(args.id, cookie=cookie, timeout=args.timeout,
                                   raw_file=args.raw, debug=args.debug)
             if fmt == "json":

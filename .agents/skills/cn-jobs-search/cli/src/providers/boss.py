@@ -85,7 +85,8 @@ def _job_from_item(it: dict) -> dict:
 
 
 def search(query: str, city_code: str, page: int = 1, page_size: int = 30,
-           cookie: str = "", timeout: float = 20, extra_params: dict | None = None,
+           cookie: str = "", timeout: float = 20, city_name: str = "",
+           extra_params: dict | None = None,
            raw_file: str | None = None, debug: bool = False) -> list[dict]:
     params = {
         "scene": "1",

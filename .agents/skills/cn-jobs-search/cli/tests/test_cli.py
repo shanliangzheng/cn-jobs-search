@@ -22,7 +22,7 @@ class CliTest(unittest.TestCase):
         p = run("providers")
         self.assertEqual(p.returncode, 0)
         names = {x["name"] for x in json.loads(p.stdout)}
-        self.assertEqual(names, {"boss", "demo"})
+        self.assertEqual(names, {"boss", "demo", "liepin"})
 
     def test_search_demo_json(self):
         p = run("search", "-q", "llm", "--provider", "demo", "-f", "json")

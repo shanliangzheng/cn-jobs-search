@@ -1,6 +1,6 @@
 ---
 name: cn-jobs-search
-version: 0.1.0
+version: 0.2.0
 description: >
   Use this skill whenever the user wants to search for jobs in mainland China, look up
   a Chinese job posting, or asks about the Chinese job market — even if they never name
@@ -24,6 +24,7 @@ allowed-tools: Bash(python3 .agents/skills/cn-jobs-search/cli/src/cli.py *)
 | provider | 状态 | 说明 |
 |---|---|---|
 | `boss` | live | BOSS 直聘 Web 接口。**需要登录 Cookie**，数据中心/海外 IP 会被风控（code=37） |
+| `liepin` | experimental | 猎聘。接口按公开资料实现，**尚未在真实网络验证**；需要登录 Cookie，详情走 JSON-LD |
 | `demo` | offline | 内置 6 条样例，无需网络，用于验证 search → detail → apply 全流程 |
 
 > 真实站点都有反爬。本 CLI **不做验证码破解、不模拟登录**；它复用你自己浏览器里
@@ -72,6 +73,17 @@ python3 .agents/skills/cn-jobs-search/cli/src/cli.py search \
 python3 .agents/skills/cn-jobs-search/cli/src/cli.py detail <ID或链接> --format plain
 ```
 
+猎聘（experimental）：
+
+```bash
+python3 .agents/skills/cn-jobs-search/cli/src/cli.py search -q "实车测试" \
+  --city 成都 -p liepin -n 20 -f json
+python3 .agents/skills/cn-jobs-search/cli/src/cli.py detail 123456 -p liepin
+```
+
+猎聘的城市编码与 BOSS 不同，CLI 会自动换算（见 `url-reference.md`）；
+未收录的城市会传空并按城市名过滤结果。
+
 `ID` 来自 search 结果（JSON 里的 `id`，即 `securityId`/`encryptJobId`），也可以直接传
 `https://www.zhipin.com/job_detail/xxx.html?securityId=...`。
 
@@ -115,6 +127,7 @@ BOSS 的搜索接口要求登录态，关键的 Cookie 是 `__zp_stoken__`（还
 
    # B. 环境变量（推荐，避免进 shell history）
    export BOSS_COOKIE="lastCity=...; __zp_stoken__=..."
+   export LIEPIN_COOKIE="..."          # 猎聘用这个
    python3 .../cli.py search -q python
 
    # C. 浏览器导出 cookies.txt（Netscape 格式）
@@ -161,7 +174,7 @@ Cookie 会过期（通常几天到几周），失效时重新导出即可。
   `cli/tests/fixtures/` 与解析逻辑（见 `cli/README.md`）。
 - 平台条款若禁止自动化访问，请以平台规则为准，改用官方 API/手动复制 JD。
 
-## 扩展新站点（猎聘 / 51job / 拉勾…）
+## 扩展新站点（51job / 拉勾 / 智联…）
 
 1. 在 `cli/src/providers/` 新建 `xxx.py`，实现：
    ```python
@@ -173,3 +186,5 @@ Cookie 会过期（通常几天到几周），失效时重新导出即可。
 2. 在 `providers/__init__.py` 的 `REGISTRY` 与 `_META` 注册。
 3. 把真实响应存到 `cli/tests/fixtures/`，补一个 `tests/test_xxx.py`。
 4. 更新本文件的 provider 表格与 `url-reference.md`。
+
+已有示例：`providers/liepin.py`（搜索 POST + 详情 JSON-LD），可以照着写。

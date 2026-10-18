@@ -14,6 +14,7 @@ cli/
 │   └── providers/
 │       ├── __init__.py   # REGISTRY + 元信息
 │       ├── boss.py       # BOSS 直聘
+│       ├── liepin.py     # 猎聘（experimental）
 │       └── demo.py       # 离线样例
 ├── fixtures/
 │   └── demo_jobs.json    # demo 数据
@@ -28,7 +29,7 @@ python3 -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
 测试覆盖：城市解析、HTML 清洗、归一化、BOSS 列表/详情解析、code=37 映射、
-Cookie 解析、demo 过滤/分页、CLI 退出码与 JSON 契约。
+猎聘搜索/JSON-LD 详情、Cookie 解析、demo 过滤/分页、CLI 退出码与 JSON 契约（36 个用例）。
 
 ## 新增一个站点
 

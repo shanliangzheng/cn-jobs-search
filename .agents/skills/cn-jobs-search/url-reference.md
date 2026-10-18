@@ -104,12 +104,77 @@ GET https://www.zhipin.com/wapi/zpgeek/job/detail.json?securityId=<securityId>
 
 不在表里的城市：浏览器里选一次城市，从请求 URL 的 `city=` 取值，再直接传 9 位码。
 
+## 猎聘（experimental）
+
+### 搜索
+
+```
+POST https://api-c.liepin.com/api/com.liepin.searchfront4c.pc-search-job
+```
+
+请求体：
+
+```json
+{
+  "data": {
+    "mainSearchPcConditionForm": {
+      "city": "280020", "dq": "280020", "pubTime": "",
+      "currentPage": 0, "pageSize": 40, "key": "实车测试",
+      "suggestTag": "", "workYearCode": "0",
+      "compId": "", "compName": "", "compTag": "", "industry": "",
+      "salary": "", "jobKind": "", "compScale": "", "compKind": "",
+      "compStage": "", "eduLevel": ""
+    },
+    "passThroughForm": {"scene": "input", "skId": "", "fkId": "", "ckId": ""}
+  },
+  "headers": {}
+}
+```
+
+必要请求头：
+
+```
+Content-Type: application/json;charset=UTF-8
+X-Client-Type: web
+X-Fscp-Version: 1.1
+X-Fscp-Std-Info: {"client_id":"40108"}
+X-Fscp-Trace-Id: <uuid>
+X-Requested-With: XMLHttpRequest
+Origin: https://www.liepin.com
+Referer: https://www.liepin.com/
+Cookie: <登录态>
+```
+
+响应：`flag=1` 成功，`data.data.jobCardList[]`；每项里 `job` 是职位、
+`comp` 是公司、`recruiter` 是招聘者。`flag=0` 看 `code/msg`
+（`-1400` 多为参数/请求头不全或被 WAF 拦）。
+
+### 详情
+
+`GET https://www.liepin.com/job/<jobId>.shtml`，从页面里的
+`<script type="application/ld+json">` 取 schema.org `JobPosting`：
+`title`、`description`、`hiringOrganization.name`、`jobLocation.address`、
+`datePosted`、`baseSalary.value`。
+
+### 城市编码（猎聘自己的 dq）
+
+| 城市 | dq | 城市 | dq |
+|---|---|---|---|
+| 北京 | 010 | 上海 | 020 |
+| 天津 | 030020 | 重庆 | 040020 |
+| 广州 | 050020 | 深圳 | 050090 |
+| 杭州 | 070020 | 成都 | 280020 |
+| 武汉 | 170020 | 南京 | 060020 |
+| 苏州 | 060080 | 西安 | 270020 |
+| 长沙 | 180020 | 郑州 | 200020 |
+| 青岛 | 120020 | 合肥 | 150020 |
+| 厦门 | 110020 | 宁波 | 070020 |
+
+> 未收录的城市：CLI 传空 dq（接口给全国），再按 `dqName` 过滤。
+> 这层映射按公开资料整理，如与站点不符，改 `providers/liepin.py` 的 `CITY_CODES`。
+
 ## 后续可接的站点（线索）
 
-- **猎聘**：`POST https://api-c.liepin.com/api/com.liepin.searchfront4c.pc-search-job`
-  body 里是 `mainSearchPcConditionForm`（`key` / `city` / `dq` / `currentPage` /
-  `pageSize` …），需要 `X-Client-Type: web`、`X-Fscp-Version: 1.1` 与登录 Cookie。
-  返回 `data.data.jobCardList[].job`。
 - **51job**：`https://we.51job.com/api/job/search-pc`，带 `sign` 参数 + WAF Cookie，
   难度较高，建议先做浏览器侧导出再解析。
 - **拉勾**：App 接口带签名，需逆向，稳定性差。

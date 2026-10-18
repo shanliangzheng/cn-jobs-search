@@ -4,7 +4,7 @@
 **中国大陆**的职位检索 skill。原仓库自带的是丹麦市场（Jobindex / Jobnet / LinkedIn 等），
 这套是按它的结构写的替代/补充。
 
-- 数据源：**BOSS 直聘**（live，需要你自己的登录 Cookie）+ **demo**（离线样例）
+- 数据源：**BOSS 直聘**（live）、**猎聘**（experimental）、**demo**（离线样例）
 - 依赖：**只要 Python 3.10+**，不需要 Bun、不需要 npm 包
 - 输出：统一 JSON / 表格 / 纯文本，直接喂给 `/rank`、`/apply`
 - 不含验证码破解、不模拟登录、不做高频抓取
@@ -20,14 +20,17 @@
     └── cli/
         ├── README.md
         ├── src/{cli,base,net,cookies}.py
-        ├── src/providers/{__init__,boss,demo}.py
+        ├── src/providers/{__init__,boss,liepin,demo}.py
         ├── fixtures/demo_jobs.json
-        └── tests/                              # 29 个用例，不联网
+        └── tests/                              # 36 个用例，不联网
 ```
 
 ## 安装
 
 ```bash
+# 0) 想先看效果（无需 Cookie）
+python3 .agents/skills/cn-jobs-search/cli/src/cli.py search -q "llm" -p demo
+
 # 1) 放到你的 ai-job-search 仓库里
 ./install.sh /path/to/ai-job-search
 
@@ -70,7 +73,9 @@ python3 .agents/skills/cn-jobs-search/cli/src/cli.py search -q "python 后端" -
 - Cookie 会过期，失效时重新导出。
 - 接口是非公开 Web 接口，**随时可能变更**。变了用 `--raw` 保存真实响应，按
   `cli/README.md` 更新解析与 fixture。
-- 只实现了 BOSS。猎聘/51job/拉勾的接入线索写在 `url-reference.md`，按同一接口扩展即可。
+- 猎聘适配器按公开接口实现，**尚未在真实网络验证**（站点 WAF 会拦机房 IP）。用
+  `--raw` 保存真实响应即可离线校准；主流程建议先用 BOSS。
+- 51job/拉勾的接入线索写在 `url-reference.md`，按同一接口扩展即可。
 - 平台若禁止自动化访问，以平台条款为准；本工具定位是「复用你自己的登录态、低频查询」。
 
 ## 接到 `/scrape`、`/rank`、`/apply`
@@ -100,9 +105,9 @@ cd .agents/skills/cn-jobs-search/cli
 python3 -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
-当前 **30 个用例全过**，覆盖：城市解析、HTML 清洗、表格宽度（中文/emoji）、
-BOSS 列表与详情解析、`code=37` → `BLOCKED` 映射、Cookie 解析、
-demo 过滤/分页、CLI 退出码与 JSON 契约。
+当前 **36 个用例全过**，覆盖：城市解析、HTML 清洗、表格宽度（中文/emoji）、
+BOSS 列表与详情解析、`code=37` → `BLOCKED` 映射、猎聘搜索与 JSON-LD 详情、
+Cookie 解析、demo 过滤/分页、CLI 退出码与 JSON 契约。
 
 ## 许可
 

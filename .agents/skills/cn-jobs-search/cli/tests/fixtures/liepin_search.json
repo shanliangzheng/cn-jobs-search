@@ -1,0 +1,46 @@
+{
+  "flag": 1,
+  "code": "0",
+  "msg": "成功",
+  "data": {
+    "data": {
+      "totalCount": 2,
+      "jobCardList": [
+        {
+          "job": {
+            "jobId": "1001",
+            "title": "实车测试工程师",
+            "salary": "15-25k",
+            "dqName": "成都",
+            "requireWorkYears": "3-5年",
+            "requireEduLevel": "本科",
+            "jobLabels": ["实车测试", "ADAS"],
+            "link": "https://www.liepin.com/job/1001.shtml",
+            "refreshTime": "2026-10-17 10:00",
+            "compName": "某汽车科技",
+            "compIndustry": "汽车",
+            "compScale": "100-499人"
+          },
+          "comp": {
+            "compName": "某汽车科技",
+            "compIndustry": "汽车",
+            "compScale": "100-499人"
+          }
+        },
+        {
+          "job": {
+            "jobId": "1002",
+            "title": "ADAS 标定技师",
+            "salary": "12-18k",
+            "dqName": "成都",
+            "requireWorkYears": "1-3年",
+            "requireEduLevel": "大专",
+            "jobLabels": ["标定", "雷达", "摄像头"],
+            "link": "https://www.liepin.com/job/1002.shtml",
+            "compName": "智驾服务商"
+          }
+        }
+      ]
+    }
+  }
+}
