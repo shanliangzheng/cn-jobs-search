@@ -64,7 +64,7 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("search", help="搜索职位")
     _add_common(s)
     s.add_argument("--param", action="append", metavar="K=V", default=[],
-                   help="透传给 BOSS 的额外查询参数，可重复，如 --param experience=103")
+                   help="透传给数据源的额外查询参数（BOSS / 猎聘），可重复，如 --param experience=103")
 
     d = sub.add_parser("detail", help="获取职位详情")
     _add_common(d, detail=True)
